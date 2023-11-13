@@ -47,6 +47,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
@@ -90,7 +92,7 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GuiClient frame = new GuiClient("tranquypaht@gmail.com");
+					GuiClient frame = new GuiClient("p");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -262,7 +264,7 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 		panel.add(btnSendMail);
 		btnSendMail.addActionListener(this);
 //		client = new Client() ;
-		InitGui();
+//		InitGui();
 //		new Thread(new Runnable() {
 //		    @Override
 //		    public void run() {
@@ -376,13 +378,19 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 	}
 
 	public void InitGui() {
+		vectorNhan.removeAllElements();
 		Packet packet_receive= getMess(new Constant().DEFINE_REQUIRE_GETMESSRe);
 		if(packet_receive!=null) {
-			vectorNhan.removeAllElements();
-			vectorNhan.addElement(packet_receive);
-			  listnhan.updateUI();
+//			
+			for(String s: packet_receive.getMess()) {
+				Packet pk= new Packet(s);
+				System.out.println(pk.getMessSent());
+				vectorNhan.addElement(pk);
+			}
+//			vectorNhan.addElement(packet_receive);
+			listnhan.updateUI();
 		}else {
-			System.out.println();
+			System.out.println("null");
 		}
 		
 
@@ -392,7 +400,11 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 		vectorGui.removeAllElements();
 		Packet packet_receive= getMess(new Constant().DEFINE_REQUIRE_GETMESSSe);
 		if(packet_receive!=null) {
-			vectorGui.addElement(packet_receive);
+			for(String s: packet_receive.getMess()) {
+				Packet pk= new Packet(s);
+				System.out.println(pk.getMessSent());
+			vectorGui.addElement(pk);
+			}
 			  listgui.updateUI();
 		}else {
 			System.out.println("null");
@@ -426,21 +438,9 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 
 			try {
 				Packet packet_receive = (Packet) deserialize(receivePacket.getData());
-				String response = packet_receive.getMessSent();
-				System.out.println(response);
+				
+			
 				return packet_receive;
-				// Xử lý phản hồi từ server
-//								            if (response.equals("success")) {
-//								                JOptionPane.showMessageDialog(null, "Đăng nhập thành công!");
-//
-//									            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnLogin);
-//									            currentFrame.dispose();
-////									            new GuiClient(txtUsername.getText()).setVisible(true);
-//								                // Xử lý khi đăng nhập thành công
-//								            } else if (response.equals("failed")) {
-//								                JOptionPane.showMessageDialog(null, "Đăng nhập thất bại!");
-//								                // Xử lý khi đăng nhập thất bại
-//								            }
 			} catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

@@ -1,6 +1,8 @@
 package Class;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Packet implements Serializable {
 	private int define_require; 
@@ -14,6 +16,7 @@ public class Packet implements Serializable {
 	private String Other;
 	private String messSent;
 	private String messReceive;
+	
 	public Packet() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -24,9 +27,8 @@ public class Packet implements Serializable {
 		this.define_require = define_require; 
 		this.name_send=name;
 		this.Other = other;
-		
-		
 	}
+
 	
 	public Packet(int define_require, String name_send, String name_receive, String title,String content, String date,  String file, String fileImage) {
 		super();
@@ -44,11 +46,21 @@ public class Packet implements Serializable {
 	}
 
 	
-
+	public Packet(List<String> mess) {
+		this.mess= mess;
+	}
 	public Packet(String messSent) {
 		super();
 		this.messSent = messSent;
 	}
+	public List<String> getMess() {
+		return mess;
+	}
+
+	public void setMess(List<String> mess) {
+		this.mess = mess;
+	}
+	private List<String> mess;
 	public String getTitle() {
 		return title;
 	}

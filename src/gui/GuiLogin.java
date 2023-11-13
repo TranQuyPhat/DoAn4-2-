@@ -188,17 +188,17 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 									Packet packet_receive = (Packet)deserialize(receivePacket.getData());
 									String response= packet_receive.getMessSent();
 								            // Xử lý phản hồi từ server
-								            if (response.equals("success")) {
+//								            if (response.equals("success")) {
 								                JOptionPane.showMessageDialog(null, "Đăng nhập thành công!");
 
 									            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnLogin);
 									            currentFrame.dispose();
 									            new GuiClient(txtUsername.getText()).setVisible(true);
 								                // Xử lý khi đăng nhập thành công
-								            } else if (response.equals("failed")) {
-								                JOptionPane.showMessageDialog(null, "Đăng nhập thất bại!");
-								                // Xử lý khi đăng nhập thất bại
-								            }
+//								            } else if (response.equals("failed")) {
+//								                JOptionPane.showMessageDialog(null, "Đăng nhập thất bại!");
+//								                // Xử lý khi đăng nhập thất bại
+//								            }
 					            } catch (ClassNotFoundException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();

@@ -75,52 +75,42 @@ public class GuiPacket extends JPanel {
 	    }else {
 	    	name=namere;
 	    }
-	    setBounds(100, 100, 450, 300);
+	    setBounds(100, 100, 453, 53);
 	    contentPane = new JPanel();
-	    contentPane.setLayout(new GridLayout(1, 4));
-
+	    contentPane.setLayout(new BorderLayout(0, 0));
+	    
 	    JPanel panel = new JPanel();
-	    contentPane.add(panel);
-	    panel.setLayout(new BorderLayout(0, 0));
-
-	    JPanel panel_1 = new JPanel();
-	    panel_1.setBackground(Color.orange);
-	    panel.add(panel_1);
-	    panel_1.setLayout(new BorderLayout(0, 0));
-
-	    JLabel lblImage = new JLabel("");
-	    try {
-	        BufferedImage bufferImage_hidden = ImageIO.read(new File(new Constant().LINK_PATH_IMAGE + "logoUser.png"));
-	        ImageIcon imageIcon_hidden = new ImageIcon(bufferImage_hidden.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-	        lblImage.setIcon(imageIcon_hidden);
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	    panel_1.add(lblImage, BorderLayout.CENTER);
-
-	    JLabel lblName = new JLabel("Phan V\u0102n PH\u00F9ng");
-	    lblName.setBackground(Color.white);
-
-	    contentPane.add(lblName);
-	    lblName.setText(name);
-
-	    JLabel lblSubject = new JLabel("");
-	    lblSubject.setBackground(Color.white);
-	    contentPane.add(lblSubject);
-	    lblSubject.setText(subject);
+	    contentPane.add(panel, BorderLayout.WEST);
+	    		
+	    	    JLabel lblName = new JLabel("Phan V\u0102n PH\u00F9ng");
+	    	    
+	    	    panel.add(lblName);
+	    	    lblName.setBackground(Color.white);
+	    
+	    JPanel panel_2 = new JPanel();
+	    contentPane.add(panel_2, BorderLayout.CENTER);
+	    lblName.setBounds(0,0,200,50);
+	    	    lblName.setText("     "+name+"     ");
+	    	    panel_2.setLayout(new BorderLayout(0, 0));
+	    
+	    	    JLabel lblSubject = new JLabel("");
+	    	    panel_2.add(lblSubject, BorderLayout.WEST);
+	    	    lblSubject.setBackground(Color.white);
+	    lblSubject.setText("              "+subject);
 
 	    JLabel lblTitle = new JLabel("v\u1EAFn b\u1EA3n n\u00E0y d\u00F9ng \u0111\u1EC3 text");
+	    panel_2.add(lblTitle);
 	    lblTitle.setBackground(Color.white);
 	    lblTitle.setAlignmentX(5000);
-	    contentPane.add(lblTitle);
-	    lblTitle.setText(content);
+	    
+	    JPanel panel_3 = new JPanel();
+	    contentPane.add(panel_3, BorderLayout.EAST);
+	    lblTitle.setText("    "+content);
 
 	    JLabel lblDate = new JLabel("12/5/2001");
+	    panel_3.add(lblDate);
 	    lblDate.setBackground(Color.white);
-	    contentPane.add(lblDate);
 	    lblDate.setText(date);
-	    // Thêm khoảng trống bên phải cho cột đầu tiên
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50));
 	    this.setLayout(new BorderLayout());
 	    this.add(contentPane, BorderLayout.CENTER);
 	    this.setVisible(true);

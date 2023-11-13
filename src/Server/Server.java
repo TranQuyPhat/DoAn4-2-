@@ -24,6 +24,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 import Class.HandleFile;
@@ -95,22 +98,22 @@ public class Server {
 			int port = datagramPacket_receive.getPort();
 			System.out.println("Da nhan yeu cau tu client " + datagramPacket_receive.getAddress());
 
-			if (require == constant.DEFINE_REQUIRE_LOGIN) {
-				if (loginServer(packet_receive)) {
-
-					sendResponse("success", ip, port);
-				} else {
-					sendResponse("failed", ip, port);
-				}
-			}
-			if (require == constant.DEFINE_REQUIRE_REGISTER) {
-				if (registerServer(packet_receive)) {
-					sendResponse("success", ip, port);
-				} else {
-					sendResponse("failed", ip, port);
-				}
-
-			}
+//			if (require == constant.DEFINE_REQUIRE_LOGIN) {
+//				if (loginServer(packet_receive)) {
+//
+//					sendResponse("success", ip, port);
+//				} else {
+//					sendResponse("failed", ip, port);
+//				}
+//			}
+//			if (require == constant.DEFINE_REQUIRE_REGISTER) {
+//				if (registerServer(packet_receive)) {
+//					sendResponse("success", ip, port);
+//				} else {
+//					sendResponse("failed", ip, port);
+//				}
+//
+//			}
 
 			if( require == constant.DEFINE_REQUIRE_SENDMAIL) {
 				
@@ -120,13 +123,17 @@ public class Server {
 			if (require == constant.DEFINE_REQUIRE_GETMESSSe) {
 
 				sendResponse(getMail(packet_receive.getName_send(), false), ip, port);
-
+				for(String list: getMail(packet_receive.getName_send(), false)) {
+					System.out.println(list);
+				}
 			}
 			if (require == constant.DEFINE_REQUIRE_GETMESSRe) {
 				sendResponse(getMail(packet_receive.getName_send(), true), ip, port);
 //					
+				for(String list: getMail(packet_receive.getName_send(), true)) {
+					System.out.println(list);
 			}
-
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -147,58 +154,60 @@ public class Server {
 //
 //    }
 
-	public String getMail(String userName, boolean isSearchByRecipient) {
+	public List<String> getMail(String userName, boolean isSearchByRecipient) {
+	    try {
+	        // Tạo kết nối tới cơ sở dữ liệu
+	        connectToDb();
 
-		try {
-			// Tạo kết nối tới cơ sở dữ liệu
-			connectToDb();
+	        // Chuẩn bị truy vấn SQL
+	        String query;
+	        if (isSearchByRecipient) {
+	            query = "SELECT * FROM mail WHERE user_receive = ?";
+	        } else {
+	            query = "SELECT * FROM mail WHERE user_send = ?";
+	        }
 
-			// Chuẩn bị truy vấn SQL
-			String query;
-			if (isSearchByRecipient) {
-			query = "SELECT * FROM mail WHERE user_receive = ?";
-			} else {
-				query = "SELECT * FROM mail WHERE user_send = ?";
-			}
+	        statement = connection.prepareStatement(query);
+	        statement.setString(1, userName);
 
-			statement = connection.prepareStatement(query);
-			statement.setString(1, userName);
+	        resultSet = statement.executeQuery();
 
-			resultSet = statement.executeQuery();
+	        List<String> results = new ArrayList<>();
 
-			if (resultSet.next()) {
-				String senderName = resultSet.getString("user_send");
-				String recipientName = resultSet.getString("user_receive");
-				String subject = resultSet.getString("subject");
-				String content = resultSet.getString("content");
+	        while (resultSet.next()) {
+	            String senderName = resultSet.getString("user_send");
+	            String recipientName = resultSet.getString("user_receive");
+	            String subject = resultSet.getString("subject");
+	            String content = resultSet.getString("content");
+	            String sentDate = resultSet.getString("date_send");
 
-				String sentDate = resultSet.getString("date_send");
+	            String result = senderName + new Constant().SPLIT_S + recipientName + new Constant().SPLIT_S + subject
+	                    + new Constant().SPLIT_S + content + new Constant().SPLIT_S + sentDate.toString();
+	            if (isSearchByRecipient) {
+	                results.add("recipient&&&" + result);
+	            } else {
+	                results.add("sender&&&" + result);
+	            }
+	        }
 
-				// Xây dựng chuỗi kết quả
-				String result = senderName + new Constant().SPLIT_S + recipientName + new Constant().SPLIT_S + subject
-						+ new Constant().SPLIT_S + content + new Constant().SPLIT_S + sentDate.toString();
-				if (isSearchByRecipient) {
-					return "recipient&&&" + result;
-				}
-				return "sender&&&" + result;
+	        return results;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Đóng kết nối và giải phóng tài nguyên
+	        try {
+	            if (resultSet != null)
+	                resultSet.close();
+	            if (statement != null)
+	                statement.close();
+	            if (connection != null)
+	                connection.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
 
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			// Đóng kết nối và giải phóng tài nguyên
-			try {
-				if (resultSet != null)
-					resultSet.close();
-				if (statement != null)
-					statement.close();
-				if (connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return userName;
+	    return null;
 	}
 
 	public boolean registerServer(Packet packet) {
@@ -326,7 +335,7 @@ public class Server {
 		return port;
 	}
 
-	public void sendResponse(String mess, InetAddress ip, int port) {
+	public void sendResponse(List<String> mess, InetAddress ip, int port) {
 
 		byte[] sendData = new byte[1024];
 		Packet packet = new Packet(mess);
