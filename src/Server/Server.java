@@ -98,22 +98,22 @@ public class Server {
 			int port = datagramPacket_receive.getPort();
 			System.out.println("Da nhan yeu cau tu client " + datagramPacket_receive.getAddress());
 
-//			if (require == constant.DEFINE_REQUIRE_LOGIN) {
-//				if (loginServer(packet_receive)) {
-//
-//					sendResponse("success", ip, port);
-//				} else {
-//					sendResponse("failed", ip, port);
-//				}
-//			}
-//			if (require == constant.DEFINE_REQUIRE_REGISTER) {
-//				if (registerServer(packet_receive)) {
-//					sendResponse("success", ip, port);
-//				} else {
-//					sendResponse("failed", ip, port);
-//				}
-//
-//			}
+			if (require == constant.DEFINE_REQUIRE_LOGIN) {
+				if (loginServer(packet_receive)) {
+
+					sendResponse2("success", ip, port);
+				} else {
+					sendResponse2("failed", ip, port);
+				}
+			}
+			if (require == constant.DEFINE_REQUIRE_REGISTER) {
+				if (registerServer(packet_receive)) {
+					sendResponse2("success", ip, port);
+				} else {
+					sendResponse2("failed", ip, port);
+				}
+
+			}
 
 			if( require == constant.DEFINE_REQUIRE_SENDMAIL) {
 				
@@ -334,7 +334,24 @@ public class Server {
 
 		return port;
 	}
+	public void sendResponse2(String mess, InetAddress ip, int port) {
 
+		byte[] sendData = new byte[1024];
+		Packet packet = new Packet(mess);
+		System.out.println(mess);
+
+		try {
+			sendData = serialize((Object) packet);
+
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
+			serverSocket.send(sendPacket);
+			System.out.println("gui thanh cong qua " + ip + "  " + port);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 	public void sendResponse(List<String> mess, InetAddress ip, int port) {
 
 		byte[] sendData = new byte[1024];

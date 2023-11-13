@@ -179,7 +179,7 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 		JLabel lblUser = new JLabel("Phan van");
 		lblUser.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		lblUser.setBounds(141, 0, 523, 25);
-		lblUser.setText("fghjkfhdgfdfsda");
+		lblUser.setText(nameSend);
 		lblUser.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa ngang
 		lblUser.setVerticalAlignment(SwingConstants.CENTER); // Căn giữa dọc
 		panel_2.add(lblUser);
