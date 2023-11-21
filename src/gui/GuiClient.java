@@ -15,7 +15,6 @@ import javax.swing.plaf.ScrollPaneUI;
 
 import Class.Client;
 import Class.CustomCell;
-import Class.HandleFile;
 import Class.Packet;
 import constant.Constant;
 
@@ -310,45 +309,81 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 //			    }
 //			}
 //		}).start();
+		listnhan.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				JList theList = (JList) e.getSource(); 
 
-//		list2.addMouseListener(new MouseListener() {
-//			
-//			@Override
-//			public void mouseReleased(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void mouseExited(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void mouseEntered(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				JList theList = (JList) e.getSource(); 
-//
-//				int index = theList.locationToIndex(e.getPoint()); 
-//				Packet packetSelect = (Packet)theList.getModel().getElementAt(index);
-//				GuiContent content  = new  GuiContent(packetSelect);
-//				content.setVisible(true);
-//			}
-//		});
-//		
+				int index = theList.locationToIndex(e.getPoint()); 
+				Packet packetSelect = (Packet)theList.getModel().getElementAt(index);
+				
+				GuiContent content  = new  GuiContent(packetSelect);
+				content.setVisible(true);
+			}
+		});
+		listgui.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				JList theList = (JList) e.getSource(); 
+
+				int index = theList.locationToIndex(e.getPoint()); 
+				Packet packetSelect = (Packet)theList.getModel().getElementAt(index);
+				GuiContent content  = new  GuiContent(packetSelect);
+				content.setVisible(true);
+			}
+		});
 	}
 
 	@Override
@@ -384,7 +419,6 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 //			
 			for(String s: packet_receive.getMess()) {
 				Packet pk= new Packet(s);
-				System.out.println(pk.getMessSent());
 				vectorNhan.addElement(pk);
 			}
 //			vectorNhan.addElement(packet_receive);
@@ -402,7 +436,6 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 		if(packet_receive!=null) {
 			for(String s: packet_receive.getMess()) {
 				Packet pk= new Packet(s);
-				System.out.println(pk.getMessSent());
 			vectorGui.addElement(pk);
 			}
 			  listgui.updateUI();

@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import Class.HandleFile;
 import Class.Packet;
 import constant.Constant;
 
@@ -44,7 +43,6 @@ public class Server {
 	byte[] byte_send = new byte[1024];
 	DatagramPacket datagramPacket_receive;
 	Constant constant = new Constant();
-	HandleFile handleFile = new HandleFile();
 
 	public Server() {
 		try {
@@ -313,26 +311,6 @@ public class Server {
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 		ObjectInputStream is = new ObjectInputStream(in);
 		return is.readObject();
-	}
-
-	public int setPortClient() {
-		int port = 0;
-		String[] s = handleFile.readFile(constant.LINK_PATH_SERVER + "portUsed.txt").split(constant.SPLIT_S);
-		// if( s.length > 1) {
-		do {
-			port = (int) (Math.random() * ((9999 - 7777) + 1) + 7777);
-			// System.out.print(port);
-			for (String ss : s) {
-				System.out.print(ss + "-");
-				if (Integer.parseInt(ss) == port)
-					port = 0;
-			}
-		} while (port == 0);
-//    	}else {
-//    		port = (int) (Math.random() * ((9999 - 8888) + 1) + 8888); 
-//    	}
-
-		return port;
 	}
 	public void sendResponse2(String mess, InetAddress ip, int port) {
 

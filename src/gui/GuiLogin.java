@@ -23,6 +23,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 
 import javax.imageio.ImageIO;
@@ -170,7 +172,7 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 
 					            byte[] receiveData = new byte[1024];
 								Packet packet = new Packet(
-										new Constant().DEFINE_REQUIRE_LOGIN, txtUsername.getText() ,new String(txtPassword.getPassword()));							
+										new Constant().DEFINE_REQUIRE_LOGIN, txtUsername.getText() ,scryptWithMD5(new String(txtPassword.getPassword())));							
 									sendData = serialize((Object) packet);
 								
 								DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,
@@ -188,17 +190,17 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 									Packet packet_receive = (Packet)deserialize(receivePacket.getData());
 									String response= packet_receive.getMessSent();
 								            // Xử lý phản hồi từ server
-//								            if (response.equals("success")) {
+								            if (response.equals("success")) {
 								                JOptionPane.showMessageDialog(null, "Đăng nhập thành công!");
 
 									            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnLogin);
 									            currentFrame.dispose();
 									            new GuiClient(txtUsername.getText()).setVisible(true);
 								                // Xử lý khi đăng nhập thành công
-//								            } else if (response.equals("failed")) {
-//								                JOptionPane.showMessageDialog(null, "Đăng nhập thất bại!");
-//								                // Xử lý khi đăng nhập thất bại
-//								            }
+								            } else if (response.equals("failed")) {
+								                JOptionPane.showMessageDialog(null, "Đăng nhập thất bại!");
+//								                 Xử lý khi đăng nhập thất bại
+								            }
 					            } catch (ClassNotFoundException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -340,4 +342,5 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 	        ObjectInputStream is = new ObjectInputStream(in);
 	        return is.readObject();
 	    }
+	
 }

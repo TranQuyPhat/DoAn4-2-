@@ -7,7 +7,7 @@ public class Constant {
 	public final String LINK_PATH_IMAGE = "image\\" ;
 	public final int 	PORT_SERVER = 8885 ; 
 	public final String IP_CLIENT = "192.168.1.10";
-	public final String IPAdrress = "192.168.1.7";
+	public final String IPAdrress = "192.168.1.18";
 	public final String SPLIT_S = "&&&"; 
 	public final int SPLIT_PACKET = 13; 
 	private static final long serialVersionUID = -7722192661662070660L;

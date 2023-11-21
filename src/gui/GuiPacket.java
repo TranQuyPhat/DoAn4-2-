@@ -63,12 +63,12 @@ public class GuiPacket extends JPanel {
 
 	    // Lấy các giá trị từ mảng
 	    String type = values[0];
-	    String namesend = values[1];
-	    String namere = values[2];
-	    String subject = values[3];
-	    String content = values[4];
-	    String date = values[5];
-	    System.out.println(type+" "+namesend+" "+namere);
+	    String mailID = values[1];
+	    String namesend = values[2];
+	    String namere = values[3];
+	    String subject = values[4];
+	    String content = values[5];
+	    String date = values[6];
 	    String name= "";
 	    if(type.equals("recipient")) {
 	    	name=namesend;
@@ -96,7 +96,7 @@ public class GuiPacket extends JPanel {
 	    	    JLabel lblSubject = new JLabel("");
 	    	    panel_2.add(lblSubject, BorderLayout.WEST);
 	    	    lblSubject.setBackground(Color.white);
-	    lblSubject.setText("              "+subject);
+	    lblSubject.setText("    "+subject);
 
 	    JLabel lblTitle = new JLabel("v\u1EAFn b\u1EA3n n\u00E0y d\u00F9ng \u0111\u1EC3 text");
 	    panel_2.add(lblTitle);
