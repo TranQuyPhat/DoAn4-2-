@@ -114,6 +114,15 @@ public class GUIServer2 extends JFrame {
 					addLogMessage(list);
 			}
 			}
+			if(require== constant.DEFINE_REQUIRE_DELETEMAILbyID) {
+				addLogMessage("Yêu cầu xoá Mail nhận từ client : " + datagramPacket_receive.getAddress());
+				System.out.println(packet_receive.getDefine_require()+" "+packet_receive.getName_send());
+				if (deleteMail(packet_receive.getName_send(),packet_receive.getOther())) {
+					sendResponse2("success", ip, port);
+				} else {
+					sendResponse2("failed", ip, port);
+				}
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -317,6 +326,29 @@ public class GUIServer2 extends JFrame {
 			 
 			return false; // Lỗi xảy ra, trả về false
 		}
+	}	
+	public boolean deleteMail(String mail_ID,String type) {
+		   try {
+		connectToDb();
+		  String fieldName = "";
+          if (type.equals("recipient")) {
+              fieldName = "is_deleted_send";
+          } else if (type.equals("sender")) {
+              fieldName = "is_deleted_receive";
+          } 
+          System.out.println(fieldName);
+		 String query ="UPDATE mail SET " + fieldName + " = 1 WHERE mail_ID= ?";
+         PreparedStatement statement = connection.prepareStatement(query);
+      
+			statement.setString(1, mail_ID);
+	         // Thực thi truy vấn xoá
+	         int rowsDeleted = statement.executeUpdate();
+	         	addLogMessage("Xoá mail thành công!");
+		        return true;
+		   } catch (SQLException e) {
+			    e.printStackTrace();
+			    return false;
+		   }
 	}
 
 	public List<String> getMail(String userName, boolean isSearchByRecipient) {
@@ -327,9 +359,9 @@ public class GUIServer2 extends JFrame {
 	        // Chuẩn bị truy vấn SQL
 	        String query;
 	        if (isSearchByRecipient) {
-	            query = "SELECT * FROM mail WHERE user_receive = ?";
+	            query = "SELECT * FROM mail WHERE user_receive = ? and is_deleted_send = 0";
 	        } else {
-	            query = "SELECT * FROM mail WHERE user_send = ?";
+	            query = "SELECT * FROM mail WHERE user_send = ? and is_deleted_receive = 0";
 	        }
 
 	        statement = connection.prepareStatement(query);
@@ -349,6 +381,7 @@ public class GUIServer2 extends JFrame {
 
 	            String result =mailID+new Constant().SPLIT_S + senderName + new Constant().SPLIT_S + recipientName + new Constant().SPLIT_S + subject
 	                    + new Constant().SPLIT_S + content + new Constant().SPLIT_S + sentDate.toString();
+	            addLogMessage(result);
 	            if (isSearchByRecipient) {
 	                results.add("recipient&&&" + result);
 	            } else {
@@ -385,7 +418,7 @@ public class GUIServer2 extends JFrame {
 	    String content = packet.getContent();
 	    String dateSend = packet.getDate();
 
-	    String query = "INSERT INTO mail (user_send, user_receive, subject, content, date_send) VALUES (?, ?, ?, ?, ?)";
+	    String query = "INSERT INTO mail (user_send, user_receive, subject, content, date_send,is_deleted_send,is_deleted_receive) VALUES (?, ?, ?, ?, ?,?,?)";
 	    try {
 	        PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -394,6 +427,8 @@ public class GUIServer2 extends JFrame {
 	        statement.setString(3, subject);
 	        statement.setString(4, content);
 	        statement.setString(5, dateSend);
+	        statement.setInt(6, 0);
+	        statement.setInt(7, 0);
 
 	        int rowsAffected = statement.executeUpdate();
 
